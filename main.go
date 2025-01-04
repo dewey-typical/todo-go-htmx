@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 
@@ -24,14 +23,8 @@ func main() {
 		tmpl := template.Must(template.ParseFiles("index.html"))
 		tmpl.ExecuteTemplate(w, "task-list-element", Task{Description: description})
 	} */
-	http.HandleFunc("/", listTasks)
+	http.HandleFunc("/", handler.ListTasks)
 	http.HandleFunc("/add-task/", handler.CreateTask)
+	http.HandleFunc("/delete-task/", handler.DeleteTask)
 	log.Fatal(http.ListenAndServe(":8000", nil))
-}
-
-func listTasks(w http.ResponseWriter, _ *http.Request) {
-	var tasks []model.Task
-	db.Db.Find(&tasks)
-	tmpl := template.Must(template.ParseFiles("index.html"))
-	tmpl.Execute(w, tasks)
 }
